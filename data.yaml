@@ -1,0 +1,13 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 2
+names: ['base_inicio', 'base_pouso']
+
+roboflow:
+  workspace: theo-corvello-soares
+  project: segmentacaodrone
+  version: 1
+  license: MIT
+  url: https://universe.roboflow.com/theo-corvello-soares/segmentacaodrone/dataset/1
