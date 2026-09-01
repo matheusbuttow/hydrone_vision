@@ -29,7 +29,7 @@ import numpy as np
 def capturar_imagens_calibracao(
     output_dir: str = "calib_images",
     camera_index: int = 2,
-    n_imagens: int = 25,
+    n_imagens: int = 21,
     frame_width: int = 640,
     frame_height: int = 480,
 ):
@@ -70,8 +70,8 @@ def capturar_imagens_calibracao(
 
 def calibrar_camera(
     images_dir: str = "calib_images",
-    chessboard_size: tuple = (9, 7),  # cantos internos (colunas, linhas)
-    square_size_mm: float = 23.5,
+    chessboard_size: tuple = (8, 6),  # cantos internos (colunas, linhas)
+    square_size_mm: float = 25.0,
 ):
     """Calcula camera_matrix e dist_coeffs a partir das imagens do tabuleiro."""
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     # Passo 2: calcular calibracao
     camera_matrix, dist_coeffs, erro = calibrar_camera(
         images_dir=img_dir,
-        chessboard_size=(9, 6),
+        chessboard_size=(8, 6),
         square_size_mm=25.0,
     )
 
