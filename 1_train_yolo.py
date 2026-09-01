@@ -20,7 +20,7 @@ AUGMENTATION_PARAMS = {
     # --- cor / iluminacao (contraste, brilho, saturacao) ---
     "hsv_h": 0.015,   # variacao de matiz (0-1)
     "hsv_s": 0.7,     # variacao de saturacao 
-    "hsv_v": 0.4,     # variacao de brilho/valor 
+    "hsv_v": 0.5,     # variacao de brilho/valor 
 
     # --- geometria ---
     "degrees": 10.0,      # rotacao maxima (graus)
@@ -32,8 +32,8 @@ AUGMENTATION_PARAMS = {
     "fliplr": 0.5,        # flip horizontal
 
     # --- augmentations compostas ---
-    "mosaic": 1.0,      # combina 4 imagens em 1
-    "mixup": 0.1,       # mistura duas imagens
+    #"mosaic": 1.0,      # combina 4 imagens em 1
+    #"mixup": 0.1,       # mistura duas imagens
     "copy_paste": 0.1,   # copia objetos entre imagens
 
     "erasing": 0.2,   # apaga regioes aleatorias (oclusao)

@@ -1,7 +1,5 @@
 """
-=========================================================
- 2) CALIBRACAO DA CAMERA (WEBCAM EMBARCADA NO DRONE)
-=========================================================
+Calibracao da webcam do drone.
 A webcam do drone nao vem calibrada. Este modulo:
     1) Captura fotos de um tabuleiro de xadrez (chessboard).
     2) Calcula a matriz intrinseca (camera_matrix) e os
@@ -10,7 +8,8 @@ A webcam do drone nao vem calibrada. Este modulo:
        (deteccao / localizacao da base de pouso).
 
 OBS: a camera ZED ja vem calibrada de fabrica e se auto-calibra.
-Esta calibracao aqui e so para a webcam.
+Esta calibracao aqui e so para a webcam, veja no seu pc qual 
+camera_index usar.
 
 Imprima um tabuleiro de xadrez (ex: 9x6 cantos internos, quadrados
 de 25mm) e tire ~20-30 fotos em angulos/distancias variados,
@@ -27,12 +26,9 @@ import cv2
 import numpy as np
 
 
-# ------------------------------------------------------------------
-# 1. CAPTURA DE IMAGENS DO TABULEIRO
-# ------------------------------------------------------------------
 def capturar_imagens_calibracao(
     output_dir: str = "calib_images",
-    camera_index: int = 1,
+    camera_index: int = 2,
     n_imagens: int = 25,
     frame_width: int = 640,
     frame_height: int = 480,
@@ -72,13 +68,10 @@ def capturar_imagens_calibracao(
     return output_dir
 
 
-# ------------------------------------------------------------------
-# 2. CALCULO DA CALIBRACAO
-# ------------------------------------------------------------------
 def calibrar_camera(
     images_dir: str = "calib_images",
-    chessboard_size: tuple = (9, 6),  # cantos internos (colunas, linhas)
-    square_size_mm: float = 25.0,
+    chessboard_size: tuple = (9, 7),  # cantos internos (colunas, linhas)
+    square_size_mm: float = 23.5,
 ):
     """Calcula camera_matrix e dist_coeffs a partir das imagens do tabuleiro."""
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -136,9 +129,6 @@ def calibrar_camera(
     return camera_matrix, dist_coeffs, mean_error
 
 
-# ------------------------------------------------------------------
-# 3. SALVAR / CARREGAR CALIBRACAO
-# ------------------------------------------------------------------
 def salvar_calibracao(camera_matrix, dist_coeffs, path: str = "webcam_calibration.npz"):
     np.savez(path, camera_matrix=camera_matrix, dist_coeffs=dist_coeffs)
     print(f"Calibracao salva em: {path}")
@@ -149,9 +139,6 @@ def carregar_calibracao(path: str = "webcam_calibration.npz"):
     return data["camera_matrix"], data["dist_coeffs"]
 
 
-# ------------------------------------------------------------------
-# 4. UNDISTORT (aplicar no frame antes de rodar a YOLO)
-# ------------------------------------------------------------------
 def undistort_frame(frame, camera_matrix, dist_coeffs):
     h, w = frame.shape[:2]
     new_camera_matrix, roi = cv2.getOptimalNewCameraMatrix(
@@ -163,7 +150,7 @@ def undistort_frame(frame, camera_matrix, dist_coeffs):
 
 if __name__ == "__main__":
     # Passo 1: capturar fotos do tabuleiro
-    img_dir = capturar_imagens_calibracao(camera_index=1, n_imagens=25)
+    img_dir = capturar_imagens_calibracao(camera_index=2, n_imagens=25)
 
     # Passo 2: calcular calibracao
     camera_matrix, dist_coeffs, erro = calibrar_camera(
@@ -177,3 +164,4 @@ if __name__ == "__main__":
 
     # Passo 3: salvar para uso no script 3 (deteccao/localizacao)
     salvar_calibracao(camera_matrix, dist_coeffs, "webcam_calibration.npz")
+
